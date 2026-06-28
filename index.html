@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NayePankh Operations Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 p-10">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+        <h1 class="text-2xl font-bold mb-6">Operations Dashboard</h1>
+        <form id="campaignForm" class="space-y-4">
+            <input type="text" id="cTitle" placeholder="Campaign Name" class="w-full p-2 border rounded" required>
+            <input type="number" id="cTarget" placeholder="Target Amount" class="w-full p-2 border rounded" required>
+            <button type="submit" class="bg-emerald-600 text-white px-6 py-2 rounded">Submit to Cloud</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your specific Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCChCa7omUo_ECHdGVx_YixKUg6fImsaFw",
+          authDomain: "nayepankh-project-a71ed.firebaseapp.com",
+          projectId: "nayepankh-project-a71ed",
+          storageBucket: "nayepankh-project-a71ed.firebasestorage.app",
+          messagingSenderId: "402643423559",
+          appId: "1:402643423559:web:eaaa980a9b3ece7fb77c62",
+          measurementId: "G-Z9N73M3HC4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('campaignForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('cTitle').value;
+            const target = document.getElementById('cTarget').value;
+            try {
+                await addDoc(collection(db, "campaigns"), { name, target, timestamp: new Date() });
+                alert("Project Data Saved to Cloud Successfully!");
+                location.reload();
+            } catch (error) {
+                alert("Error saving data: " + error.message);
+            }
+        });
+    </script>
+</body>
+</html>
